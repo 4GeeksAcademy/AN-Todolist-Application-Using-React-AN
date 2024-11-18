@@ -1,139 +1,138 @@
 /* Estilos globales para el cuerpo */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  /* Estilo para el contenedor de la lista de tareas */
-  .todo-list {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Limitar el ancho máximo */
-    text-align: center;
-  }
-  
-  /* Estilo del título */
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Estilo del input de nueva tarea */
-  input {
-    width: 80%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-    box-sizing: border-box;
-  }
-  
-  /* Estilos generales para los botones */
-  button {
-    padding: 8px 16px;
-    background-color: #4CAF50; /* Color de fondo cuando está habilitado */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin: 5px;
-  }
-  
-  /* Estilo para el botón deshabilitado */
-  button:disabled {
-    background-color: #d3d3d3;
-    color: #a9a9a9;
-    cursor: not-allowed;
-  }
-  
-  /* Estilo para el botón de guardar tarea */
-  button.save-task {
-    background-color: #4CAF50;
-  }
-  
-  /* Estilo para el botón de "Eliminar" */
-  button.delete {
-    background-color: #e74c3c; /* Rojo para eliminar */
-  }
-  
-  button.delete:hover {
-    background-color: #c0392b;
-  }
-  
-  /* Estilo para el botón de "Editar" */
-  button.edit {
-    background-color: #f39c12; /* Naranja para editar */
-  }
-  
-  button.edit:hover {
-    background-color: #e67e22;
-  }
-  
-  /* Estilo cuando el ratón pasa sobre el botón */
-  button:hover:enabled {
-    background-color: #45a049;
-  }
-  
-  /* Estilos de la lista */
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  /* Estilo de cada tarea en la lista */
-  li {
-    display: flex;
-    justify-content: space-between; /* Esto asegura que los botones estén a la derecha */
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-  
-  /* Estilo del texto de cada tarea */
-  li span {
-    flex: 1;
-    word-wrap: break-word;
-  }
-  
-  /* Asegurar que los botones no estén pegados */
-  li button {
-    margin-left: 10px; /* Espacio entre el botón de editar y de eliminar */
-  }
-  
-  /* Estilo para cuando los botones reciben foco */
-  button:focus {
-    outline: none;
-  }
-  
-  /* Espacio entre el texto de la tarea y los botones */
-  ul li div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  /* Estilos específicos para el modo de edición */
-  ul li div input {
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Estilo para el contenedor de la lista de tareas */
+.todo-list {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Limitar el ancho máximo */
+  text-align: center;
+}
+
+/* Estilo del título */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Estilo del input de nueva tarea */
+input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+/* Estilos generales para los botones */
+button {
+  padding: 8px 16px;
+  background-color: #4CAF50; /* Color de fondo cuando está habilitado */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+}
+
+/* Estilo para el botón deshabilitado */
+button:disabled {
+  background-color: #d3d3d3;
+  color: #a9a9a9;
+  cursor: not-allowed;
+}
+
+/* Estilo para el botón de guardar tarea */
+button.save-task {
+  background-color: #4CAF50;
+}
+
+/* Estilo para el botón de "Eliminar" */
+button.delete {
+  background-color: #e74c3c; /* Rojo para eliminar */
+}
+
+button.delete:hover {
+  background-color: #c0392b;
+}
+
+/* Estilo para el botón de "Editar" */
+button.edit {
+  background-color: #f39c12; /* Naranja para editar */
+}
+
+button.edit:hover {
+  background-color: #e67e22;
+}
+
+/* Estilo cuando el ratón pasa sobre el botón */
+button:hover:enabled {
+  background-color: #45a049;
+}
+
+/* Estilos de la lista */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Estilo de cada tarea en la lista */
+li {
+  display: flex;
+  justify-content: space-between; /* Esto asegura que los botones estén a la derecha */
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* Estilo del texto de cada tarea */
+li span {
+  flex: 1;
+  word-wrap: break-word;
+}
+
+/* Asegurar que los botones no estén pegados */
+li button {
+  margin-left: 10px; /* Espacio entre el botón de editar y de eliminar */
+}
+
+/* Estilo para cuando los botones reciben foco */
+button:focus {
+  outline: none;
+}
+
+/* Espacio entre el texto de la tarea y los botones */
+ul li div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Estilos específicos para el modo de edición */
+ul li div input {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}

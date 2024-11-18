@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 const TodoList = () => {
   const [inputvalue, setInputvalue] = useState(""); // Estado para el input de la nueva tarea
@@ -8,7 +9,7 @@ const TodoList = () => {
 
   const getlistTodos = async () => {
     try {
-      const response = await fetch("https://playground.4geeks.com/todo/users/AlanNico");
+      const response = await fetch("https://playground.4geeks.com/todo/users/Anico");
       const result = await response.json();
       setListask(result.todos);
     } catch (error) {
@@ -25,7 +26,7 @@ const TodoList = () => {
         "is_done": false
       };
 
-      const response = await fetch("https://playground.4geeks.com/todo/todos/AlanNico", {
+      const response = await fetch("https://playground.4geeks.com/todo/todos/Anico", {
         method: "POST",
         headers: {
           "Accept": "application/json",
@@ -40,11 +41,70 @@ const TodoList = () => {
       }
 
       const result = await response.json();
-      setListask(prevlistTaks => [...prevlistTaks, result]);
+      setListask(prevlistTaks => {
+        const updatedTasks = [...prevlistTaks, result];
+
+        // Mostrar SweetAlert si hay 10 o más tareas
+        if (updatedTasks.length === 10) {
+          Swal.fire({
+            title: '¡Atención!',
+            text: '¡Has alcanzado el límite de 10 tareas!',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+
+        return updatedTasks;
+      });
+
       setInputvalue(""); // Limpiar el input de la nueva tarea
 
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`https://playground.4geeks.com/todo/todos/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        alert("No se pudo eliminar la tarea");
+        return;
+      }
+
+      // Actualizamos el estado para eliminar la tarea de la lista
+      setListask(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteAllTasks = async () => {
+    try {
+      const promises = lisTask.map(task => 
+        fetch(`https://playground.4geeks.com/todo/todos/${task.id}`, {
+          method: "DELETE",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+      );
+      
+      // Esperar a que todas las promesas se resuelvan
+      await Promise.all(promises);
+
+      // Limpiar la lista de tareas después de eliminarlas todas
+      setListask([]);
+    } catch (error) {
+      console.log("Error al eliminar todas las tareas", error);
     }
   };
 
@@ -88,31 +148,10 @@ const TodoList = () => {
         console.log(error);
       }
     } else {
-      // Si el campo está vacío, eliminamos la tarea
-      try {
-        const response = await fetch(`https://playground.4geeks.com/todo/todos/${editTaskId}`, {
-          method: "DELETE",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          }
-        });
-
-        if (!response.ok) {
-          alert("No se pudo eliminar la tarea");
-          return;
-        }
-
-        // Actualizamos el estado para eliminar la tarea de la lista
-        setListask(prevTasks => prevTasks.filter(task => task.id !== editTaskId));
-
-        // Limpiar el estado de edición
-        setEditTaskId(null);
-        setEditLabel("");
-
-      } catch (error) {
-        console.log(error);
-      }
+      // Si el campo de texto está vacío, eliminar la tarea
+      deleteTask(editTaskId);
+      setEditTaskId(null);
+      setEditLabel("");
     }
   };
 
@@ -122,9 +161,19 @@ const TodoList = () => {
     setEditLabel("");
   };
 
+  // Filtrar las tareas pendientes (is_done === false)
+  const pendingTasks = lisTask.filter(task => !task.is_done);
+
   useEffect(() => {
     getlistTodos();
   }, []);
+
+  // Detectar el ENTER para guardar tarea
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      savetask();
+    }
+  };
 
   return (
     <div className="todo-list">
@@ -134,11 +183,24 @@ const TodoList = () => {
       <input
         value={inputvalue}
         onChange={(event) => setInputvalue(event.target.value)}
+        onKeyPress={handleKeyPress} 
         placeholder="Escribe una tarea"
       />
-      <button onClick={savetask} disabled={!inputvalue.trim()}>
-        Guardar tarea
-      </button>
+
+      <div>
+        {/* Botón de guardar tarea */}
+        <button onClick={savetask} disabled={!inputvalue.trim()}>
+          Guardar tarea
+        </button>
+
+        {/* Botón de eliminar todas las tareas */}
+        <button 
+          onClick={deleteAllTasks}
+          style={{ backgroundColor: "red", color: "white" }}
+        >
+          Eliminar todas las tareas
+        </button>
+      </div>
 
       {/* Mostrar las tareas */}
       <ul>
@@ -152,22 +214,44 @@ const TodoList = () => {
                   onChange={(e) => setEditLabel(e.target.value)}
                   placeholder="Edita la tarea"
                 />
-                <button onClick={editTodo}>
+                {/* Botón para guardar edición o eliminar tarea */}
+                <button
+                  onClick={editTodo}
+                  style={{ backgroundColor: editLabel.trim() ? "green" : "red", color: "white" }}
+                >
                   {editLabel.trim() ? "Guardar edición" : "Eliminar"}
                 </button>
+                {/* Botón para cancelar la edición */}
                 <button onClick={cancelEdit}>Cancelar</button>
               </div>
             ) : (
               <div>
                 <span>{task.label}</span>
+                {/* Botón para activar la edición */}
                 <button onClick={() => { setEditTaskId(task.id); setEditLabel(task.label); }}>
                   Editar
+                </button>
+                {/* Botón de eliminar tarea con icono */}
+                <button 
+                  onClick={() => deleteTask(task.id)}
+                  style={{ backgroundColor: "transparent", border: "none", color: "red", fontSize: "20px" }}
+                >
+                  <i className="fa fa-times" aria-hidden="true"></i> 
                 </button>
               </div>
             )}
           </li>
         ))}
       </ul>
+
+      {/* Mostrar cuántas tareas están pendientes */}
+      <div>
+        {pendingTasks.length === 0 ? (
+          <p>No hay tareas pendientes.</p>
+        ) : (
+          <p>{`Tienes ${pendingTasks.length} tarea${pendingTasks.length > 1 ? 's' : ''} pendiente${pendingTasks.length > 1 ? 's' : ''}.`}</p>
+        )}
+      </div>
     </div>
   );
 };
